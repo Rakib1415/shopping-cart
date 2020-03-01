@@ -59,14 +59,14 @@
 
                      <div class="col-md-8">
                         <h5>Subtotal: </h5>
-                        <h5>Tax:</h5>
+                        <h5>Tax:(2% vat)</h5>
                         <h5>Total:</h5>
                      </div>
 
                      <div class="col-md-4 status">
                         <h5>$<span id="subTotal">1,278</span> </h5>
-                        <h5>$<span id="tax">0</span></h5>
-                        <h5>$<span id="total">1219</span></h5>
+                        <h5>$<span id="tax">26</span></h5>
+                        <h5>$<span id="total">1304</span></h5>
                      </div>
                   </div>
                </div>
@@ -79,6 +79,17 @@
    </section>
 
    <script>
+      // remove item 
+      const removeItem = document.getElementsByClassName("remove-item");
+      removeItem[0].addEventListener("click",function(){
+         const cartItem = document.getElementsByClassName("cart-item");
+         cartItem[0].style.display = "none";
+      })
+
+      removeItem[1].addEventListener("click",function(){
+         const cartItem = document.getElementsByClassName("cart-item");
+         cartItem[1].style.display = "none";
+      })
       document.getElementById("currentCart").disabled = true;
       document.getElementById("currentCover").disabled = true;
       // Plus button event Handler
@@ -97,6 +108,8 @@
          updateTotalPrice(currentPriceId,totalPrice);
          let totalAmount = getSumCart("currentPrice","coverPrice");
          updateTotalPrice("subTotal",totalAmount);
+         let taxAmount = Math.round((totalAmount * 2)/100);
+         updateTotalPrice("tax",taxAmount);
          let total = getSumCart("tax","subTotal");
          updateTotalPrice("total",total);
 
@@ -116,14 +129,20 @@
          MinusBtn.addEventListener("click",function(){
          let currentCartNumber = getInputNumber(currentNumberId);
          let totalCart = getTotalCartMinus(currentCartNumber);
+         if(totalCart < 0){
+            return;
+         }
          updateCartNumber(currentNumberId,totalCart);
          let totalPrice = getTotalPrice(price,totalCart);
          updateTotalPrice(currentPriceId,totalPrice);
          let totalAmount = getSumCart("currentPrice","coverPrice");
          updateTotalPrice("subTotal",totalAmount);
          let total = getSumCart("tax","subTotal");
-         updateTotalPrice("total",total);
-
+         // updateTotalPrice("total",total);
+         let taxAmount = Math.round((totalAmount * 2)/100);
+         updateTotalPrice("tax",taxAmount);
+         let totalNumber = getSumCart("tax","subTotal");
+         updateTotalPrice("total",totalNumber);
       })
       }
       // String converter function 
@@ -173,7 +192,6 @@
         let phonePrice = getInputNumberConvert(phonePriceId);
         let coverPrice = getInputNumberConvert(coverPriceId);
         return phonePrice + coverPrice;
-
      }
 
    </script>
