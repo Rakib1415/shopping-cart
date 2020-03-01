@@ -25,11 +25,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button class="btn btn-default"><i id="addCartMinusBtn"  class="fas fa-minus"></i></button>
+                           <input id="currentCart" type="text" class="form-control text-center" value="1">
+                           <button class="btn btn-default"><i id="addCartPlusBtn" class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$1219</h5>
+                        <h5>$<span id="currentPrice">1219</span> </h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -43,12 +43,12 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button class="btn btn-default"><i id="addCoverMinusBtn" class="fas fa-minus"></i></button>
+                           <input id="currentCover" type="text" class="form-control text-center" value="1">
+                           <button class="btn btn-default"><i id="addCoverPlusBtn" class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$59</h5>
+                        <h5>$ <span id="coverPrice">59</span> </h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -64,9 +64,9 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$<span id="subTotal">1,278</span> </h5>
+                        <h5>$<span id="tax">0</span></h5>
+                        <h5>$<span id="total">1219</span></h5>
                      </div>
                   </div>
                </div>
@@ -77,6 +77,104 @@
          </div>
       </div>
    </section>
+
+   <script>
+      // Plus button event Handler
+      const addCartPlusBtn = document.getElementById("addCartPlusBtn");
+      const addCoverPlusBtn = document.getElementById("addCoverPlusBtn");
+
+      plusButtonClick(addCartPlusBtn,"currentCart","currentPrice",1219);
+      plusButtonClick(addCoverPlusBtn,"currentCover","coverPrice",59);
+
+      function plusButtonClick(plusBtn,currentNumberId,currentPriceId,price){
+         plusBtn.addEventListener("click",function(){
+         let currentCartNumber = getInputNumber(currentNumberId);
+         let totalCart = getTotalCartPlus(currentCartNumber);
+         updateCartNumber(currentNumberId,totalCart);
+         let totalPrice = getTotalPrice(price,totalCart);
+         updateTotalPrice(currentPriceId,totalPrice);
+         let totalAmount = getSumCart("currentPrice","coverPrice");
+         updateTotalPrice("subTotal",totalAmount);
+         let total = getSumCart("tax","subTotal");
+         updateTotalPrice("total",total);
+
+
+      })
+      }
+
+      // Minus Button event Handler 
+
+      const addCartMinusBtn = document.getElementById("addCartMinusBtn");
+      const addCoverMinusBtn = document.getElementById("addCoverMinusBtn");
+
+      MinusButtonClick(addCartMinusBtn,"currentCart","currentPrice",1219);
+      MinusButtonClick(addCoverMinusBtn,"currentCover","coverPrice",59);
+
+      function MinusButtonClick(MinusBtn,currentNumberId,currentPriceId,price){
+         MinusBtn.addEventListener("click",function(){
+         let currentCartNumber = getInputNumber(currentNumberId);
+         let totalCart = getTotalCartMinus(currentCartNumber);
+         updateCartNumber(currentNumberId,totalCart);
+         let totalPrice = getTotalPrice(price,totalCart);
+         updateTotalPrice(currentPriceId,totalPrice);
+         let totalAmount = getSumCart("currentPrice","coverPrice");
+         updateTotalPrice("subTotal",totalAmount);
+         let total = getSumCart("tax","subTotal");
+         updateTotalPrice("total",total);
+
+      })
+      }
+      // String converter function 
+
+      function getInputNumber(id){
+         let cart = document.getElementById(id).value;
+         let cartNumber = parseFloat(cart);
+         return cartNumber;
+      }
+      function getInputNumberConvert(id){
+         let cart = document.getElementById(id).innerText;
+         let cartNumber = parseFloat(cart);
+         return cartNumber;
+      }
+
+      // Calculate Cart Number 
+
+      function getTotalCartPlus(cartValue){
+         cartValue++;
+         return cartValue;
+      }
+
+      
+      function getTotalCartMinus(cartValue){
+         cartValue--;
+         return cartValue;
+      }
+
+      // Calculate total price
+      function getTotalPrice(price,totalCart){
+         let totalPrice = price * totalCart;
+         return totalPrice;
+      }
+
+      // Update Cart Number
+      function updateCartNumber(id,value){
+         document.getElementById(id).value = value;
+      }
+
+       // Update Total Price
+       function updateTotalPrice(id,value){
+         document.getElementById(id).innerText = value;
+      }
+
+      // add total cart 
+     function getSumCart(phonePriceId,coverPriceId){
+        let phonePrice = getInputNumberConvert(phonePriceId);
+        let coverPrice = getInputNumberConvert(coverPriceId);
+        return phonePrice + coverPrice;
+
+     }
+
+   </script>
 </body>
 
 </html>
